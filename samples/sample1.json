@@ -1,0 +1,86 @@
+[
+  {
+    "id": "e1f5802.d61bb8",
+    "type": "sensor_air_temperature",
+    "z": "a2439384.3fd6f",
+    "name": "",
+    "deviceid": "44",
+    "timeout": "5",
+    "x": 118.5,
+    "y": 453,
+    "wires": [
+      [
+        "2800cd05.1f8352"
+      ]
+    ]
+  },
+  {
+    "id": "424c00bb.fc562",
+    "type": "sensor_air_humidity",
+    "z": "a2439384.3fd6f",
+    "name": "",
+    "deviceid": "44",
+    "timeout": "5",
+    "x": 118.5,
+    "y": 335,
+    "wires": [
+      [
+        "17a6b8d0.918657"
+      ]
+    ]
+  },
+  {
+    "id": "2800cd05.1f8352",
+    "type": "math_superior",
+    "z": "a2439384.3fd6f",
+    "value": "10",
+    "x": 312.5,
+    "y": 455,
+    "wires": [
+      [
+        "c65e7ecc.32038"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "17a6b8d0.918657",
+    "type": "math_superior",
+    "z": "a2439384.3fd6f",
+    "value": "20",
+    "x": 314.5,
+    "y": 336,
+    "wires": [
+      [
+        "c65e7ecc.32038"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "c65e7ecc.32038",
+    "type": "logic_and",
+    "z": "a2439384.3fd6f",
+    "name": "",
+    "x": 560.5,
+    "y": 399,
+    "wires": [
+      [
+        "78911ba7.1e0a44"
+      ]
+    ]
+  },
+  {
+    "id": "78911ba7.1e0a44",
+    "type": "global_actuator",
+    "z": "a2439384.3fd6f",
+    "name": "relay1",
+    "deviceid": "44",
+    "relaynumber": "1",
+    "value": "1",
+    "timeout": "5",
+    "x": 759.5,
+    "y": 400,
+    "wires": []
+  }
+]

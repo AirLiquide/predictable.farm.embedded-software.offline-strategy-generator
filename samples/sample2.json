@@ -1,0 +1,448 @@
+[
+  {
+    "id": "c3987ebf.4b33d",
+    "type": "scheduler",
+    "z": "f1ba2d8.11ed8d",
+    "name": "Day",
+    "topic": "",
+    "payloadType": "date",
+    "crontab": "{\"value\":[\"45-59/1 9-10 * * *\",\"*/1 10-15 * * *\",\"0-45/1 15-16 * * *\"],\"valid\":true}",
+    "sendFrequency": "interval",
+    "sendDay": "everyday",
+    "sendRange": "time-range",
+    "onceHour": "",
+    "onceMinute": "",
+    "intervalUnits": "minutes",
+    "days": "[true,true,true,true,true,true,true]",
+    "day": "",
+    "startHour": "9",
+    "startMinute": "45",
+    "endHour": "16",
+    "endMinute": "00",
+    "interval": "1",
+    "x": 320,
+    "y": 220,
+    "wires": [
+      [
+        "b97101ae.4539e",
+        "c2ab0d9d.fdf9f"
+      ]
+    ]
+  },
+  {
+    "id": "b97101ae.4539e",
+    "type": "logic_and",
+    "z": "f1ba2d8.11ed8d",
+    "name": "",
+    "x": 736,
+    "y": 184,
+    "wires": [
+      [
+        "f01427b9.cb5168",
+        "2f00f7dd.629648"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "dd4a8155.962b7",
+    "type": "sensor_light_par",
+    "z": "f1ba2d8.11ed8d",
+    "name": "Current P.A.R.",
+    "deviceid": "22",
+    "timeout": "10",
+    "x": 190,
+    "y": 100,
+    "wires": [
+      [
+        "cf038b35.3d3128"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "cf038b35.3d3128",
+    "type": "math_inferior",
+    "z": "f1ba2d8.11ed8d",
+    "value": "55",
+    "x": 390,
+    "y": 120,
+    "wires": [
+      [
+        "b97101ae.4539e"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "813e929e.d39b3",
+    "type": "sensor_actuator",
+    "z": "f1ba2d8.11ed8d",
+    "name": "ID14 R1 CO2 VALVE",
+    "deviceid": "14",
+    "relayId": "1",
+    "timeout": "10",
+    "x": 231,
+    "y": 9,
+    "wires": [
+      [
+        "2c33a517.4e113a"
+      ]
+    ]
+  },
+  {
+    "id": "2c33a517.4e113a",
+    "type": "math_equal",
+    "z": "f1ba2d8.11ed8d",
+    "name": "is OFF",
+    "equalType": "relay",
+    "value": "1",
+    "relayValue": "0",
+    "compareValue": "0",
+    "x": 410,
+    "y": 20,
+    "wires": [
+      [
+        "b97101ae.4539e"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "eb0f1b83.349308",
+    "type": "sensor_air_co2",
+    "z": "f1ba2d8.11ed8d",
+    "name": "Current CO2",
+    "deviceid": "22",
+    "timeout": "10",
+    "x": 170,
+    "y": 480,
+    "wires": [
+      [
+        "167cfef6.fc1701"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "9fa073ba.7124d",
+    "type": "math_inferior",
+    "z": "f1ba2d8.11ed8d",
+    "value": "1000",
+    "x": 470,
+    "y": 320,
+    "wires": [
+      [
+        "b97101ae.4539e"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "f01427b9.cb5168",
+    "type": "global_actuator",
+    "z": "f1ba2d8.11ed8d",
+    "name": "ID14 R1 CO2 VALVE ON",
+    "deviceid": "14",
+    "relaynumber": "1",
+    "value": "0",
+    "timeout": "10",
+    "x": 1062,
+    "y": 290,
+    "wires": []
+  },
+  {
+    "id": "746b60f1.68565",
+    "type": "math_inferior",
+    "z": "f1ba2d8.11ed8d",
+    "value": "400",
+    "x": 430,
+    "y": 480,
+    "wires": [
+      [
+        "f77e4086.9f38b"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "c6ea6ef.fac369",
+    "type": "math_inferior",
+    "z": "f1ba2d8.11ed8d",
+    "value": "950",
+    "x": 470,
+    "y": 380,
+    "wires": [
+      [
+        "c2ab0d9d.fdf9f"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "c2ab0d9d.fdf9f",
+    "type": "logic_and",
+    "z": "f1ba2d8.11ed8d",
+    "name": "",
+    "x": 650,
+    "y": 340,
+    "wires": [
+      [
+        "f01427b9.cb5168",
+        "b0becb04.1e4178",
+        "2f00f7dd.629648"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "f77e4086.9f38b",
+    "type": "logic_and",
+    "z": "f1ba2d8.11ed8d",
+    "name": "",
+    "x": 670,
+    "y": 500,
+    "wires": [
+      [
+        "f01427b9.cb5168",
+        "2f00f7dd.629648"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "2fc5e633.e30c6a",
+    "type": "math_equal",
+    "z": "f1ba2d8.11ed8d",
+    "name": "is OFF",
+    "equalType": "relay",
+    "value": "1",
+    "relayValue": "0",
+    "compareValue": "0",
+    "x": 470,
+    "y": 560,
+    "wires": [
+      [
+        "f77e4086.9f38b",
+        "c2ab0d9d.fdf9f"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "c9680a22.7f78e8",
+    "type": "scheduler",
+    "z": "f1ba2d8.11ed8d",
+    "name": "Night",
+    "topic": "",
+    "payloadType": "date",
+    "crontab": "{\"value\":[\"30-59/5 21-22 * * *\",\"*/5 22-4 * * *\",\"0-30/5 4-5 * * *\"],\"valid\":true}",
+    "sendFrequency": "interval",
+    "sendDay": "everyday",
+    "sendRange": "time-range",
+    "onceHour": "",
+    "onceMinute": "",
+    "intervalUnits": "minutes",
+    "days": "[true,true,true,true,true,true,true]",
+    "day": "",
+    "startHour": "21",
+    "startMinute": "30",
+    "endHour": "5",
+    "endMinute": "00",
+    "interval": "5",
+    "x": 500,
+    "y": 740,
+    "wires": [
+      [
+        "29315c1e.858764"
+      ]
+    ]
+  },
+  {
+    "id": "167cfef6.fc1701",
+    "type": "math_average",
+    "z": "f1ba2d8.11ed8d",
+    "name": "average 15s",
+    "amount": "15",
+    "delayType": "seconds",
+    "x": 250,
+    "y": 360,
+    "wires": [
+      [
+        "9fa073ba.7124d",
+        "c6ea6ef.fac369",
+        "746b60f1.68565"
+      ]
+    ]
+  },
+  {
+    "id": "d580bf04.355bc",
+    "type": "sensor_air_co2",
+    "z": "f1ba2d8.11ed8d",
+    "name": "Current CO2",
+    "deviceid": "22",
+    "timeout": "10",
+    "x": 189,
+    "y": 831,
+    "wires": [
+      [
+        "d0757397.0b5c7"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "7e5e8c74.8a9e64",
+    "type": "math_superior",
+    "z": "f1ba2d8.11ed8d",
+    "value": "1000",
+    "x": 522,
+    "y": 824,
+    "wires": [
+      [
+        "9f998da3.165bb"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "b0becb04.1e4178",
+    "type": "debug",
+    "z": "f1ba2d8.11ed8d",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 718.4444580078125,
+    "y": 275.77777099609375,
+    "wires": []
+  },
+  {
+    "id": "d0757397.0b5c7",
+    "type": "math_average",
+    "z": "f1ba2d8.11ed8d",
+    "name": "average 15s",
+    "amount": "15",
+    "delayType": "seconds",
+    "x": 360,
+    "y": 830,
+    "wires": [
+      [
+        "7e5e8c74.8a9e64"
+      ]
+    ]
+  },
+  {
+    "id": "29315c1e.858764",
+    "type": "logic_and",
+    "z": "f1ba2d8.11ed8d",
+    "name": "",
+    "x": 790,
+    "y": 740,
+    "wires": [
+      [
+        "9f998da3.165bb"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "9c8d6e7d.8d01b",
+    "type": "sensor_actuator",
+    "z": "f1ba2d8.11ed8d",
+    "name": "ID14 R1 CO2 VALVE",
+    "deviceid": "14",
+    "relayId": "1",
+    "timeout": "10",
+    "x": 230,
+    "y": 580,
+    "wires": [
+      [
+        "2fc5e633.e30c6a"
+      ]
+    ]
+  },
+  {
+    "id": "9f998da3.165bb",
+    "type": "global_actuator",
+    "z": "f1ba2d8.11ed8d",
+    "name": "ID14 R1 CO2 VALVE OFF",
+    "deviceid": "14",
+    "relaynumber": "1",
+    "value": "0",
+    "timeout": "10",
+    "x": 1070,
+    "y": 800,
+    "wires": []
+  },
+  {
+    "id": "2f00f7dd.629648",
+    "type": "delay",
+    "z": "f1ba2d8.11ed8d",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "18",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "x": 1042.2222222222222,
+    "y": 384.44444444444446,
+    "wires": [
+      [
+        "1376a90.0292e57"
+      ]
+    ]
+  },
+  {
+    "id": "1376a90.0292e57",
+    "type": "global_actuator",
+    "z": "f1ba2d8.11ed8d",
+    "name": "ID14 R1 CO2 VALVE OFF",
+    "deviceid": "14",
+    "relaynumber": "1",
+    "value": "1",
+    "timeout": "10",
+    "x": 1150,
+    "y": 480,
+    "wires": []
+  },
+  {
+    "id": "5bf15bf3.29a5f4",
+    "type": "math_equal",
+    "z": "f1ba2d8.11ed8d",
+    "name": "is ON",
+    "equalType": "relay",
+    "value": "1",
+    "relayValue": "1",
+    "compareValue": "1",
+    "x": 650,
+    "y": 680,
+    "wires": [
+      [
+        "29315c1e.858764"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "c295923b.1547c",
+    "type": "sensor_actuator",
+    "z": "f1ba2d8.11ed8d",
+    "name": "ID14 R1 CO2 VALVE",
+    "deviceid": "14",
+    "relayId": "1",
+    "timeout": "10",
+    "x": 450,
+    "y": 640,
+    "wires": [
+      [
+        "5bf15bf3.29a5f4"
+      ]
+    ]
+  }
+]

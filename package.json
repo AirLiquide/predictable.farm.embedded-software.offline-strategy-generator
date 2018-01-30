@@ -1,0 +1,31 @@
+{
+  "name": "predictable-offlinestrat-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/webpack -d",
+    "build-hot": "./node_modules/.bin/webpack -d --watch",
+    "dev": "supervisor -- bundle.js -h 0.0.0.0 -p 8080",
+    "start": "node bundle.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@digital-git.airliquide.com:brivael.lepogam-sc/predictable-offlinestrat-generator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "express": "^4.16.2",
+    "supervisor": "^0.12.0",
+    "webpack": "^3.10.0"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^2.11.1"
+  }
+}
