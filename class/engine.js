@@ -1,8 +1,7 @@
 import Reader from "./reader";
 
 import { redtype } from '../enums/redtype';
-import config from './config.json';
-import sensorssample from "../samples/sensor1";
+import config from '../config.json';
 
 export default class Engine {
     constructor(sensorHelper) {
@@ -33,8 +32,17 @@ export default class Engine {
         }
 
         switch (child.type) {
+            case redtype.math_average:
+                this.subcondition[child.id] = true;
+                break;
+
             case redtype.math_inferior:
-                if(this.sensorHelper.getSensorByIdAndType(config.device_id, parent.type).sensor_value < child.value) {
+                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) === null) {
+                    this.subcondition[child.id] = false;
+                    break;
+                }
+
+                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) < child.value) {
                     this.subcondition[child.id] = true;
                 } else {
                     this.subcondition[child.id] = false;
@@ -42,7 +50,12 @@ export default class Engine {
                 break;
 
             case redtype.math_inferior_equal:
-                if(this.sensorHelper.getSensorByIdAndType(config.device_id, parent.type).sensor_value <= child.value) {
+                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) === null) {
+                    this.subcondition[child.id] = false;
+                    break;
+                }
+
+                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) <= child.value) {
                     this.subcondition[child.id] = true;
                 } else {
                     this.subcondition[child.id] = false;
@@ -50,7 +63,12 @@ export default class Engine {
                 break;
 
             case redtype.math_equal:
-                if(this.sensorHelper.getSensorByIdAndType(config.device_id, parent.type).sensor_value == child.value) {
+                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) === null) {
+                    this.subcondition[child.id] = false;
+                    break;
+                }
+
+                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) === child.value) {
                     this.subcondition[child.id] = true;
                 } else {
                     this.subcondition[child.id] = false;
@@ -58,7 +76,12 @@ export default class Engine {
                 break;
 
             case redtype.math_superior:
-                if(this.sensorHelper.getSensorByIdAndType(config.device_id, parent.type).sensor_value > child.value) {
+                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) === null) {
+                    this.subcondition[child.id] = false;
+                    break;
+                }
+
+                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) > child.value) {
                     this.subcondition[child.id] = true;
                 } else {
                     this.subcondition[child.id] = false;
@@ -66,7 +89,12 @@ export default class Engine {
                 break;
 
             case redtype.math_superior_equal:
-                if(this.sensorHelper.getSensorByIdAndType(config.device_id, parent.type).sensor_value >= child.value) {
+                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) === null) {
+                    this.subcondition[child.id] = false;
+                    break;
+                }
+
+                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) >= child.value) {
                     this.subcondition[child.id] = true;
                 } else {
                     this.subcondition[child.id] = false;
@@ -74,29 +102,29 @@ export default class Engine {
                 break;
 
             case redtype.logic_and:
-                let conditionLogicOk = true;
+                let conditionLogicAndOk = true;
 
                 for(let childLogic of this.reader.getConnectedNodeParentsFromId(child.id)) {
                     if(this.subcondition[childLogic.id] !== true) {
-                        conditionLogicOk = false
+                        conditionLogicAndOk = false
                     }
                 }
 
-                if(conditionLogicOk) {
+                if(conditionLogicAndOk) {
                     this.subcondition[child.id] = true;
                 }
                 break;
 
-            case redtype.logic_and:
-                let conditionLogicOk = false;
+            case redtype.logic_or:
+                let conditionLogicOrOk = false;
 
                 for(let childLogic of this.reader.getConnectedNodeParentsFromId(child.id)) {
-                    if(this.subcondition[childLogic.id] === true && !conditionLogicOk) {
-                        conditionLogicOk = true
+                    if(this.subcondition[childLogic.id] === true && !conditionLogicOrOk) {
+                        conditionLogicOrOk = true
                     }
                 }
 
-                if(conditionLogicOk) {
+                if(conditionLogicOrOk) {
                     this.subcondition[child.id] = true;
                 }
                 break;

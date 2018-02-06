@@ -1,0 +1,128 @@
+[
+  {
+    "id": "24204cf1.e58c34",
+    "type": "sensor_air_pressure",
+    "z": "2476ed73.36b772",
+    "name": "",
+    "deviceid": "65",
+    "timeout": "5",
+    "x": 145.5,
+    "y": 224,
+    "wires": [
+      [
+        "ddb6bd3d.966c"
+      ]
+    ]
+  },
+  {
+    "id": "5b48bd8d.e51164",
+    "type": "sensor_air_co2",
+    "z": "2476ed73.36b772",
+    "name": "",
+    "deviceid": "65",
+    "timeout": "5",
+    "x": 143.5,
+    "y": 301,
+    "wires": [
+      [
+        "33f4abca.405694"
+      ]
+    ]
+  },
+  {
+    "id": "eed9ad6d.5a85a",
+    "type": "sensor_air_humidity",
+    "z": "2476ed73.36b772",
+    "name": "",
+    "deviceid": "65",
+    "timeout": "5",
+    "x": 133.5,
+    "y": 430,
+    "wires": [
+      [
+        "bfd13afb.bf9008"
+      ]
+    ]
+  },
+  {
+    "id": "ddb6bd3d.966c",
+    "type": "math_superior",
+    "z": "2476ed73.36b772",
+    "value": "10",
+    "x": 318.5,
+    "y": 223,
+    "wires": [
+      [
+        "4ca600de.e1e81"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "33f4abca.405694",
+    "type": "math_superior_equal",
+    "z": "2476ed73.36b772",
+    "value": "50",
+    "x": 319.5,
+    "y": 296,
+    "wires": [
+      [
+        "4ca600de.e1e81"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "bfd13afb.bf9008",
+    "type": "math_inferior",
+    "z": "2476ed73.36b772",
+    "value": "5",
+    "x": 321.5,
+    "y": 425,
+    "wires": [
+      [
+        "d092e39f.0c618"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "4ca600de.e1e81",
+    "type": "logic_and",
+    "z": "2476ed73.36b772",
+    "name": "",
+    "x": 477.5,
+    "y": 270,
+    "wires": [
+      [
+        "d092e39f.0c618"
+      ]
+    ]
+  },
+  {
+    "id": "d092e39f.0c618",
+    "type": "logic_or",
+    "z": "2476ed73.36b772",
+    "name": "",
+    "x": 645.5,
+    "y": 386,
+    "wires": [
+      [
+        "74626bad.75d9d4"
+      ]
+    ]
+  },
+  {
+    "id": "74626bad.75d9d4",
+    "type": "global_actuator",
+    "z": "2476ed73.36b772",
+    "name": "relay1",
+    "deviceid": "65",
+    "relaynumber": "1",
+    "value": "0",
+    "timeout": "5",
+    "x": 783.5,
+    "y": 381,
+    "wires": []
+  }
+]

@@ -1,4 +1,5 @@
 export let redtype = {
+    math_average:"math_average",
     math_equal:"math_equal",
     math_inferior:"math_inferior",
     math_inferior_equal:"math_inferior_equal",
