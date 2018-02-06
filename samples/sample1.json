@@ -1,7 +1,7 @@
 [
   {
     "id": "e1f5802.d61bb8",
-    "type": "sensor_air_temperature",
+    "type": "air_pressure",
     "z": "a2439384.3fd6f",
     "name": "",
     "deviceid": "44",
@@ -16,7 +16,7 @@
   },
   {
     "id": "424c00bb.fc562",
-    "type": "sensor_air_humidity",
+    "type": "air_co2",
     "z": "a2439384.3fd6f",
     "name": "",
     "deviceid": "44",
@@ -33,7 +33,7 @@
     "id": "2800cd05.1f8352",
     "type": "math_superior",
     "z": "a2439384.3fd6f",
-    "value": "10",
+    "value": "50",
     "x": 312.5,
     "y": 455,
     "wires": [

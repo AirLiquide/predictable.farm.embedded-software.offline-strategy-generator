@@ -5,10 +5,6 @@ export default class Reader {
     constructor() {
     }
 
-    compute() {
-
-    }
-
     getEntryPointNode() {
         let entryPointNode = [];
 
