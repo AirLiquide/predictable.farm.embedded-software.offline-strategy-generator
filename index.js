@@ -4,7 +4,7 @@ import ConfigHelper from "./class/ConfigHelper";
 
 import config from './config.json';
 
-const http = require('http');
+const LOCAL_ENGINE_PORT = 6500;
 
 let sensorHelper = new Sensor();
 let configHelper = new ConfigHelper();
@@ -12,20 +12,7 @@ let engine = new Engine(sensorHelper, configHelper);
 
 configHelper.engine = engine;
 
-var server = http.createServer(function(req, res) {
-    if(config.env === 'dev') {
-        if(req.url === '/favicon.ico') {
-            return;
-        }
-
-        res.writeHead(200);
-        res.end(engine.compute());
-    }
-});
-
-server.listen(8080);
-
-const io = require('socket.io')(server);
+const io = require('socket.io')(LOCAL_ENGINE_PORT);
 
 io.on('connection', function (socket) {
     engine.setSocket(socket);
