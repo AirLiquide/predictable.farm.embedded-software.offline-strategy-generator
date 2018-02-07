@@ -1,13 +1,12 @@
 import Reader from "./reader";
-
 import { redtype } from '../enums/redtype';
-import config from '../config.json';
 
 export default class Engine {
     constructor(sensorHelper, configHelper) {
         this.reader = new Reader();
         this.sensorHelper = sensorHelper;
         this.configHelper = configHelper;
+        this.socket = null;
 
         this.subcondition = [];
         this.queueEntryPoint = [];
@@ -21,6 +20,10 @@ export default class Engine {
         this.extractSubCondition(this.queueEntryPoint.shift().id);
 
         return "done";
+    }
+
+    setSocket(socket) {
+        this.socket = socket;
     }
 
     extractSubCondition(entrypoint) {
@@ -142,6 +145,12 @@ export default class Engine {
 
                 if(conditionGlobalActuatorOk) {
                     this.subcondition[child.id] = true;
+
+                    if(this.socket !== null) {
+                        this.socket.emit("sensor-receive", {
+                            sensor_type:child.name
+                        });
+                    }
                 }
                 break;
         }

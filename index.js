@@ -28,6 +28,8 @@ server.listen(8080);
 const io = require('socket.io')(server);
 
 io.on('connection', function (socket) {
+    engine.setSocket(socket);
+
     socket.on('set-config', function(data) {
         console.log(data);
         configHelper.deviceid = data.deviceid;
