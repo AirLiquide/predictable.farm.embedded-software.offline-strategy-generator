@@ -1,6 +1,6 @@
 //import sample from "../samples/sample1";
-import sample from "../samples/sample2";
-//import sample from "../samples/sample3";
+//import sample from "../samples/sample2";
+import sample from "../samples/sample3";
 
 export default class Reader {
     constructor() {

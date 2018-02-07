@@ -7,8 +7,10 @@ import config from './config.json';
 const http = require('http');
 
 let sensorHelper = new Sensor();
-let engine = new Engine(sensorHelper);
-let configHelper = new ConfigHelper(engine);
+let configHelper = new ConfigHelper();
+let engine = new Engine(sensorHelper, configHelper);
+
+configHelper.engine = engine;
 
 var server = http.createServer(function(req, res) {
     if(config.env === 'dev') {
@@ -27,6 +29,7 @@ const io = require('socket.io')(server);
 
 io.on('connection', function (socket) {
     socket.on('set-config', function(data) {
+        console.log(data);
         configHelper.deviceid = data.deviceid;
         configHelper.graph = data.graph;
         socket.emit('config-ok', configHelper.getConfig());

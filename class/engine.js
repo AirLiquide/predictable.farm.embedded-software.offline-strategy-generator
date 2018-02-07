@@ -4,9 +4,11 @@ import { redtype } from '../enums/redtype';
 import config from '../config.json';
 
 export default class Engine {
-    constructor(sensorHelper) {
+    constructor(sensorHelper, configHelper) {
         this.reader = new Reader();
         this.sensorHelper = sensorHelper;
+        this.configHelper = configHelper;
+
         this.subcondition = [];
         this.queueEntryPoint = [];
     }
@@ -37,12 +39,12 @@ export default class Engine {
                 break;
 
             case redtype.math_inferior:
-                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) === null) {
+                if(this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === null) {
                     this.subcondition[child.id] = false;
                     break;
                 }
 
-                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) < child.value) {
+                if(this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) < child.value) {
                     this.subcondition[child.id] = true;
                 } else {
                     this.subcondition[child.id] = false;
@@ -50,12 +52,12 @@ export default class Engine {
                 break;
 
             case redtype.math_inferior_equal:
-                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) === null) {
+                if(this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === null) {
                     this.subcondition[child.id] = false;
                     break;
                 }
 
-                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) <= child.value) {
+                if(this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) <= child.value) {
                     this.subcondition[child.id] = true;
                 } else {
                     this.subcondition[child.id] = false;
@@ -63,12 +65,12 @@ export default class Engine {
                 break;
 
             case redtype.math_equal:
-                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) === null) {
+                if(this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === null) {
                     this.subcondition[child.id] = false;
                     break;
                 }
 
-                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) === child.value) {
+                if(this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === child.value) {
                     this.subcondition[child.id] = true;
                 } else {
                     this.subcondition[child.id] = false;
@@ -76,12 +78,12 @@ export default class Engine {
                 break;
 
             case redtype.math_superior:
-                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) === null) {
+                if(this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === null) {
                     this.subcondition[child.id] = false;
                     break;
                 }
 
-                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) > child.value) {
+                if(this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) > child.value) {
                     this.subcondition[child.id] = true;
                 } else {
                     this.subcondition[child.id] = false;
@@ -89,12 +91,12 @@ export default class Engine {
                 break;
 
             case redtype.math_superior_equal:
-                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) === null) {
+                if(this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === null) {
                     this.subcondition[child.id] = false;
                     break;
                 }
 
-                if(this.sensorHelper.getSensorValueByIdAndType(config.device_id, parent.type) >= child.value) {
+                if(this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) >= child.value) {
                     this.subcondition[child.id] = true;
                 } else {
                     this.subcondition[child.id] = false;
