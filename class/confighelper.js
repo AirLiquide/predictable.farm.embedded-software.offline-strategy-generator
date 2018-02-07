@@ -1,6 +1,3 @@
-import Reader from "./reader";
-
-import { redtype } from '../enums/redtype';
 import config from '../config.json';
 
 export default class ConfigHelper {
@@ -12,6 +9,7 @@ export default class ConfigHelper {
 
     getConfig() {
         return {
+            type:config.type,
             relays:this.engine.reader.getRelayNodes()
         }
     }
