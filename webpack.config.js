@@ -6,9 +6,6 @@ var APP_DIR = path.resolve(__dirname);
 
 var fs = require('fs');
 var nodeModules = {};
-var ignore = new webpack.IgnorePlugin(new RegExp("/usr/lib/node_modules/socket.io"));
-
-global.lol = "lol";
 
 fs.readdirSync('node_modules')
     .filter(function(x) {
@@ -64,8 +61,7 @@ module.exports = function(env) {
     config.plugins = [
         new webpack.DefinePlugin({
             CONTEXT: JSON.stringify(env),
-        }),
-        ignore
+        })
     ];
 
     return config;

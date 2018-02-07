@@ -13,7 +13,8 @@ configHelper.engine = engine;
 let io = {};
 
 if(CONTEXT === 'linino') {
-    io = require('/usr/lib/node_modules/socket.io')(LOCAL_ENGINE_PORT);
+    io = eval('require')('/usr/lib/node_modules/socket.io')(LOCAL_ENGINE_PORT);
+    console.log("STARTED");
 } else {
     io = require('socket.io')(LOCAL_ENGINE_PORT);
 }
@@ -24,12 +25,14 @@ io.on('connection', function (socket) {
     socket.emit('get-config');
 
     socket.on('set-config', function(data) {
+        console.log(data);
         configHelper.deviceid = data.deviceid;
         configHelper.graph = data.graph;
         socket.emit('config-ok', configHelper.getConfig());
     });
 
     socket.on('sensor-emit', function(data) {
+        console.log(data);
         sensorHelper.updateData(data);
         engine.compute();
     });
