@@ -9,7 +9,7 @@
     "build-hot": "./node_modules/.bin/webpack -d --watch --env=local",
     "build-linino": "./node_modules/.bin/webpack -d --env=linino",
     "dev": "supervisor -- build/bundle-local.js -h 0.0.0.0 -p 8080",
-    "start": "node bundle.js"
+    "start": "node build/bundle-local.js"
   },
   "repository": {
     "type": "git",

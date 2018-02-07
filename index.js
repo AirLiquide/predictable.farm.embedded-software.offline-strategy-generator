@@ -2,8 +2,6 @@ import Engine from './class/engine';
 import Sensor from './class/sensor';
 import ConfigHelper from "./class/ConfigHelper";
 
-import config from './config.json';
-
 const LOCAL_ENGINE_PORT = 6500;
 
 let sensorHelper = new Sensor();
@@ -14,7 +12,7 @@ configHelper.engine = engine;
 
 let io = {};
 
-if(CONTEXT == 'linino') {
+if(CONTEXT === 'linino') {
     io = require('/usr/lib/node_modules/socket.io')(LOCAL_ENGINE_PORT);
 } else {
     io = require('socket.io')(LOCAL_ENGINE_PORT);
@@ -23,11 +21,14 @@ if(CONTEXT == 'linino') {
 io.on('connection', function (socket) {
     engine.setSocket(socket);
 
+    socket.emit('get-config');
+
     socket.on('set-config', function(data) {
         configHelper.deviceid = data.deviceid;
         configHelper.graph = data.graph;
         socket.emit('config-ok', configHelper.getConfig());
     });
+
     socket.on('sensor-emit', function(data) {
         sensorHelper.updateData(data);
         engine.compute();
