@@ -1,19 +1,24 @@
 import Engine from './class/engine';
 import Sensor from './class/sensor';
+import ConfigHelper from "./class/ConfigHelper";
+
 import config from './config.json';
 
 const http = require('http');
 
 let sensorHelper = new Sensor();
+let engine = new Engine(sensorHelper);
+let configHelper = new ConfigHelper(engine);
 
 var server = http.createServer(function(req, res) {
-    if(req.url === '/favicon.ico') {
-        return;
-    }
+    if(config.env === 'dev') {
+        if(req.url === '/favicon.ico') {
+            return;
+        }
 
-    let engine = new Engine(sensorHelper);
-    res.writeHead(200);
-    res.end(engine.compute());
+        res.writeHead(200);
+        res.end(engine.compute());
+    }
 });
 
 server.listen(8080);
@@ -21,11 +26,13 @@ server.listen(8080);
 const io = require('socket.io')(server);
 
 io.on('connection', function (socket) {
-    socket.on('get-config', function() {
-        socket.emit('get-config', config);
+    socket.on('set-config', function(data) {
+        configHelper.deviceid = data.deviceid;
+        configHelper.graph = data.graph;
+        socket.emit('config-ok', configHelper.getConfig());
     });
-
     socket.on('sensor-emit', function(data) {
         sensorHelper.updateData(data);
+        //engine.compute();
     });
 });

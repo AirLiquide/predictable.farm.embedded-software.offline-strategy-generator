@@ -32,6 +32,18 @@ export default class Reader {
         return entryPointNode;
     }
 
+    getRelayNodes() {
+        let nodeRelay = [];
+
+        for(let i = 0; i < sample.length; i++) {
+            if(sample[i].type === "global_actuator") {
+                nodeRelay.push({deviceid:sample[i].deviceid, relaynumber:sample[i].relaynumber});
+            }
+        }
+
+        return nodeRelay;
+    }
+
     getNodeFromId(id) {
         for(let i = 0; i < sample.length; i++) {
             if(sample[i].id === id) {

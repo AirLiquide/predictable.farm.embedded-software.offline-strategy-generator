@@ -11,7 +11,7 @@ export default class Sensor {
     getSensorValueByIdAndType(id, type) {
 
 
-        console.log(this.data);
+        // console.log(this.data);
         // console.log(id+type);
         // console.log(this.data[id+type]);
 

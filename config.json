@@ -1,4 +1,4 @@
 {
-  "type":"server",
-  "device_id":65
+  "env": "dev",
+  "type": "server"
 }
