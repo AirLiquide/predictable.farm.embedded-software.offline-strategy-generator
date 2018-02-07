@@ -12,13 +12,18 @@ let engine = new Engine(sensorHelper, configHelper);
 
 configHelper.engine = engine;
 
-const io = require('socket.io')(LOCAL_ENGINE_PORT);
+let io = {};
+
+if(CONTEXT == 'linino') {
+    io = require('/usr/lib/node_modules/socket.io')(LOCAL_ENGINE_PORT);
+} else {
+    io = require('socket.io')(LOCAL_ENGINE_PORT);
+}
 
 io.on('connection', function (socket) {
     engine.setSocket(socket);
 
     socket.on('set-config', function(data) {
-        console.log(data);
         configHelper.deviceid = data.deviceid;
         configHelper.graph = data.graph;
         socket.emit('config-ok', configHelper.getConfig());

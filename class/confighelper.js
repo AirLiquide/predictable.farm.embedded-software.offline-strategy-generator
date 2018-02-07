@@ -4,7 +4,7 @@ export default class ConfigHelper {
     constructor() {
         this.engine = {};
         this.deviceid = 0;
-        this.graph = {};
+        this.graph = null;
     }
 
     getConfig() {

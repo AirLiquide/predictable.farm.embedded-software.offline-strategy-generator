@@ -13,13 +13,13 @@ export default class Engine {
     }
 
     compute() {
-        for(let entrypoint of this.reader.getEntryPointNode()) {
-            this.queueEntryPoint.push(entrypoint);
+        if(this.configHelper.graph !== null) {
+            for(let entrypoint of this.reader.getEntryPointNode()) {
+                this.queueEntryPoint.push(entrypoint);
+            }
+
+            this.extractSubCondition(this.queueEntryPoint.shift().id);
         }
-
-        this.extractSubCondition(this.queueEntryPoint.shift().id);
-
-        return "done";
     }
 
     setSocket(socket) {

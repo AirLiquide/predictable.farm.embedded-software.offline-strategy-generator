@@ -1,11 +1,14 @@
 var webpack = require('webpack');
 var path = require('path');
 
-var BUILD_DIR = path.resolve(__dirname);
+var BUILD_DIR = path.resolve(__dirname + '/build');
 var APP_DIR = path.resolve(__dirname);
 
 var fs = require('fs');
 var nodeModules = {};
+var ignore = new webpack.IgnorePlugin(new RegExp("/usr/lib/node_modules/socket.io"));
+
+global.lol = "lol";
 
 fs.readdirSync('node_modules')
     .filter(function(x) {
@@ -45,4 +48,25 @@ var config = {
     externals: nodeModules,
 };
 
-module.exports = config;
+module.exports = function(env) {
+    if(env === "linino") {
+        config.output = {
+            path: BUILD_DIR,
+            filename: 'bundle-linino.js'
+        }
+    } else {
+        config.output = {
+            path: BUILD_DIR,
+            filename: 'bundle-local.js'
+        }
+    }
+
+    config.plugins = [
+        new webpack.DefinePlugin({
+            CONTEXT: JSON.stringify(env),
+        }),
+        ignore
+    ];
+
+    return config;
+};

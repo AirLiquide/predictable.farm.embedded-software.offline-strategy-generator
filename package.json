@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/webpack -d",
-    "build-hot": "./node_modules/.bin/webpack -d --watch",
-    "dev": "supervisor -- bundle.js -h 0.0.0.0 -p 8080",
+    "build": "./node_modules/.bin/webpack -d --env=local",
+    "build-hot": "./node_modules/.bin/webpack -d --watch --env=local",
+    "build-linino": "./node_modules/.bin/webpack -d --env=linino",
+    "dev": "supervisor -- build/bundle-local.js -h 0.0.0.0 -p 8080",
     "start": "node bundle.js"
   },
   "repository": {
