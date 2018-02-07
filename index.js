@@ -38,6 +38,8 @@ io.on('connection', function (socket) {
     });
     socket.on('sensor-emit', function(data) {
         sensorHelper.updateData(data);
-        //engine.compute();
+        if(config.env !== 'dev') {
+            engine.compute();
+        }
     });
 });
