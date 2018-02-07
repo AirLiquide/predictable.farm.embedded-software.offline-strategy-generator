@@ -149,7 +149,7 @@ export default class Engine {
                     if(this.socket !== null) {
                         this.socket.emit("sensor-receive", {
                             sensor_type:child.type,
-                            id:child.deviceid,
+                            device_id:child.deviceid,
                             sensor_mode:1
                         });
                     }
