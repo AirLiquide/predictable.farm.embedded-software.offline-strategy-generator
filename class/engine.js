@@ -3,7 +3,7 @@ import { redtype } from '../enums/redtype';
 
 export default class Engine {
     constructor(sensorHelper, configHelper) {
-        this.reader = new Reader();
+        this.reader = new Reader(configHelper);
         this.sensorHelper = sensorHelper;
         this.configHelper = configHelper;
         this.socket = null;

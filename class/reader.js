@@ -1,22 +1,23 @@
-//import sample from "../samples/sample1";
-//import sample from "../samples/sample2";
-import sample from "../samples/sample3";
+//import sample1 from "../this.configHelper.graphs/this.configHelper.graph1";
+//import sample2 from "../this.configHelper.graphs/this.configHelper.graph2";
+//import sample3 from "../this.configHelper.graphs/this.configHelper.graph3";
 
 export default class Reader {
-    constructor() {
+    constructor(configHelper) {
+        this.configHelper = configHelper;
     }
 
     getEntryPointNode() {
         let entryPointNode = [];
 
-        for(let i = 0; i < sample.length; i++) {
+        for(let i = 0; i < this.configHelper.graph.length; i++) {
             let wires = [];
 
-            for(let j = 0; j < sample.length; j++) {
+            for(let j = 0; j < this.configHelper.graph.length; j++) {
                 if(i !== j) {
-                    for(let subwires of sample[j].wires) {
+                    for(let subwires of this.configHelper.graph[j].wires) {
                         for(let wire of subwires) {
-                            if(wire === sample[i].id) {
+                            if(wire === this.configHelper.graph[i].id) {
                                 wires += wire;
                             }
                         }
@@ -25,7 +26,7 @@ export default class Reader {
             }
 
             if(wires.length === 0) {
-                entryPointNode.push(sample[i])
+                entryPointNode.push(this.configHelper.graph[i])
             }
         }
 
@@ -35,9 +36,9 @@ export default class Reader {
     getRelayNodes() {
         let nodeRelay = [];
 
-        for(let i = 0; i < sample.length; i++) {
-            if(sample[i].type === "global_actuator") {
-                nodeRelay.push({deviceid:sample[i].deviceid, relaynumber:sample[i].relaynumber});
+        for(let i = 0; i < this.configHelper.graph.length; i++) {
+            if(this.configHelper.graph[i].type === "global_actuator") {
+                nodeRelay.push({deviceid:this.configHelper.graph[i].deviceid, relaynumber:this.configHelper.graph[i].relaynumber});
             }
         }
 
@@ -45,9 +46,9 @@ export default class Reader {
     }
 
     getNodeFromId(id) {
-        for(let i = 0; i < sample.length; i++) {
-            if(sample[i].id === id) {
-                return sample[i];
+        for(let i = 0; i < this.configHelper.graph.length; i++) {
+            if(this.configHelper.graph[i].id === id) {
+                return this.configHelper.graph[i];
             }
         }
     }
@@ -55,11 +56,11 @@ export default class Reader {
     getConnectedNodeParentsFromId(id) {
         let nodes = [];
 
-        for(let i = 0; i < sample.length; i++) {
-            for(let subwires of sample[i].wires) {
+        for(let i = 0; i < this.configHelper.graph.length; i++) {
+            for(let subwires of this.configHelper.graph[i].wires) {
                 for(let wire of subwires) {
                     if(wire === id) {
-                        nodes.push(sample[i])
+                        nodes.push(this.configHelper.graph[i])
                     }
                 }
             }
