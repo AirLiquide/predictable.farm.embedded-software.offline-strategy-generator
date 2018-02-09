@@ -49,12 +49,12 @@ module.exports = function(env) {
     if(env === "linino") {
         config.output = {
             path: BUILD_DIR,
-            filename: 'bundle-linino.js'
+            filename: 'local-engine.js'
         }
     } else {
         config.output = {
             path: BUILD_DIR,
-            filename: 'bundle-local.js'
+            filename: 'bundle.js'
         }
     }
 
