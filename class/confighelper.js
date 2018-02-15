@@ -1,5 +1,3 @@
-import config from '../config.json';
-
 export default class ConfigHelper {
     constructor() {
         this.engine = {};
@@ -8,9 +6,16 @@ export default class ConfigHelper {
     }
 
     getConfig() {
+        var relays = this.engine.reader.getRelayNodes();
+        var type = "client";
+
+        if (relays.indexOf(this.deviceid) > -1) {
+            type = "server";
+        }
+
         return {
-            type:config.type,
-            relays:this.engine.reader.getRelayNodes()
+            type: type,
+            relays: relays
         }
     }
 }

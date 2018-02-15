@@ -14,7 +14,7 @@ let io = {};
 
 if(CONTEXT === 'linino') {
     io = eval('require')('/usr/lib/node_modules/socket.io')(LOCAL_ENGINE_PORT);
-    console.log("STARTED");
+    console.log("LOCAL ENGINE STARTED");
 } else {
     io = require('socket.io')(LOCAL_ENGINE_PORT);
 }
@@ -22,17 +22,19 @@ if(CONTEXT === 'linino') {
 io.on('connection', function (socket) {
     engine.setSocket(socket);
 
+    console.log("emitting get-config");
     socket.emit('get-config');
 
     socket.on('set-config', function(data) {
-        console.log(data);
-        configHelper.deviceid = data.deviceid;
+        configHelper.deviceid = data.device_id;
         configHelper.graph = data.graph;
+        console.log("set config: DEVICE " + data.device_id);
         socket.emit('config-ok', configHelper.getConfig());
+        console.log("emitting config-ok in mode " + configHelper.getConfig().type + " with " + configHelper.getConfig().relays.length + " relays");
     });
 
     socket.on('sensor-emit', function(data) {
-        console.log(data);
+        console.log("sensor-emit: " + data);
         sensorHelper.updateData(data);
         engine.compute();
     });

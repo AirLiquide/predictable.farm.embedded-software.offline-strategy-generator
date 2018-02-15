@@ -147,10 +147,11 @@ export default class Engine {
                     this.subcondition[child.id] = true;
 
                     if(this.socket !== null) {
+                        console.log("emitting sensor-receive for " + child.type + "/" + child.deviceid);
                         this.socket.emit("sensor-receive", {
-                            sensor_type:child.type,
-                            device_id:child.deviceid,
-                            sensor_mode:1
+                            sensor_type: child.type,
+                            device_id: child.deviceid,
+                            sensor_mode: 1
                         });
                     }
                 }
