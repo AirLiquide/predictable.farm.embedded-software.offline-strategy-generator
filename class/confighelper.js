@@ -9,8 +9,12 @@ export default class ConfigHelper {
         var relays = this.engine.reader.getRelayNodes();
         var type = "client";
 
-        if (relays.indexOf(this.deviceid) > -1) {
-            type = "server";
+        // Compute node type
+        for (var i in relays) {
+            if (relays[i].deviceid === this.deviceid) {
+                type = "server";
+                break;
+            }
         }
 
         return {
