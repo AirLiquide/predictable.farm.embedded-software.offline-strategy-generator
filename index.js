@@ -28,14 +28,19 @@ io.on('connection', function (socket) {
     socket.on('set-config', function(data) {
         configHelper.deviceid = data.device_id;
         configHelper.graph = data.graph;
+        var conf = configHelper.getConfig();
         console.log("set config: DEVICE " + data.device_id);
-        socket.emit('config-ok', configHelper.getConfig());
-        console.log("emitting config-ok in mode " + configHelper.getConfig().type + " with " + configHelper.getConfig().relays.length + " relays");
+        socket.emit('config-ok', conf);
+        console.log("emitting config-ok in mode " + conf.type + " with " + conf.relays.length + " relays");
     });
 
     socket.on('sensor-emit', function(data) {
         console.log("sensor-emit: " + data);
         sensorHelper.updateData(data);
         engine.compute();
+    });
+
+    socket.on('error', function(error) {
+        console.log("error: " + error);
     });
 });
