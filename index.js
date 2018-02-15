@@ -31,13 +31,16 @@ io.on('connection', function (socket) {
         var conf = configHelper.getConfig();
         console.log("set config: DEVICE " + data.device_id);
         socket.emit('config-ok', conf);
+        configHelper.ready = true;
         console.log("emitting config-ok in mode " + conf.type + " with " + conf.relays.length + " relays");
     });
 
     socket.on('sensor-emit', function(data) {
-        console.log("sensor-emit: " + data);
-        sensorHelper.updateData(data);
-        engine.compute();
+        if(configHelper.ready) {
+            console.log("sensor-emit: " + data);
+            sensorHelper.updateData(data);
+            engine.compute();
+        }
     });
 
     socket.on('error', function(error) {

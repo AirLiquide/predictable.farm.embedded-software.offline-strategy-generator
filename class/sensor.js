@@ -9,12 +9,6 @@ export default class Sensor {
     }
 
     getSensorValueByIdAndType(id, type) {
-
-
-        // console.log(this.data);
-        // console.log(id+type);
-        // console.log(this.data[id+type]);
-
         if(this.data[id+type] !== undefined) {
             if(this.data[id+type].sensor_value !== undefined) {
                 return this.data[id+type].sensor_value;

@@ -54,7 +54,7 @@ module.exports = function(env) {
     } else {
         config.output = {
             path: BUILD_DIR,
-            filename: 'bundle.js'
+            filename: 'bundle-local.js'
         }
     }
 

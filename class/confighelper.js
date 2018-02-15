@@ -3,6 +3,7 @@ export default class ConfigHelper {
         this.engine = {};
         this.deviceid = 0;
         this.graph = null;
+        this.ready = false;
     }
 
     getConfig() {
