@@ -42,8 +42,4 @@ io.on('connection', function (socket) {
             engine.compute();
         }
     });
-
-    socket.on('error', function(error) {
-        console.log("error: " + error);
-    });
 });

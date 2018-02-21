@@ -1,7 +1,3 @@
-//import sample1 from "../this.configHelper.graphs/this.configHelper.graph1";
-//import sample2 from "../this.configHelper.graphs/this.configHelper.graph2";
-//import sample3 from "../this.configHelper.graphs/this.configHelper.graph3";
-
 export default class Reader {
     constructor(configHelper) {
         this.configHelper = configHelper;
@@ -15,16 +11,15 @@ export default class Reader {
 
             for(let j = 0; j < this.configHelper.graph.length; j++) {
                 if(i !== j) {
-                    for(let subwires of this.configHelper.graph[j].wires) {
-                        for(let wire of subwires) {
-                            if(wire === this.configHelper.graph[i].id) {
-                                wires += wire;
+                    for(let k = 0; k < this.configHelper.graph[j].wires.length; k++) {
+                        for(let l = 0; l < this.configHelper.graph[j].wires[k].length; l++) {
+                            if(this.configHelper.graph[j].wires[k][l] === this.configHelper.graph[i].id) {
+                                wires += this.configHelper.graph[j].wires[k][l];
                             }
                         }
                     }
                 }
             }
-
             if(wires.length === 0) {
                 entryPointNode.push(this.configHelper.graph[i])
             }
@@ -57,9 +52,10 @@ export default class Reader {
         let nodes = [];
 
         for(let i = 0; i < this.configHelper.graph.length; i++) {
-            for(let subwires of this.configHelper.graph[i].wires) {
-                for(let wire of subwires) {
-                    if(wire === id) {
+            for(let j = 0; j < this.configHelper.graph[i].wires.length; j++) {
+
+                for(let k = 0; k < this.configHelper.graph[i].wires[j]; k++) {
+                    if(this.configHelper.graph[i].wires[j][k] === id) {
                         nodes.push(this.configHelper.graph[i])
                     }
                 }

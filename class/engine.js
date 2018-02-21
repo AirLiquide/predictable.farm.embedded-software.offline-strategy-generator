@@ -14,8 +14,8 @@ export default class Engine {
 
     compute() {
         if(this.configHelper.graph !== null) {
-            for(let entrypoint of this.reader.getEntryPointNode()) {
-                this.queueEntryPoint.push(entrypoint);
+            for(let i = 0; i < this.reader.getEntryPointNode().length; i++) {
+                this.queueEntryPoint.push(this.reader.getEntryPointNode()[i]);
             }
 
             this.extractSubCondition(this.queueEntryPoint.shift().id);
@@ -109,8 +109,9 @@ export default class Engine {
             case redtype.logic_and:
                 let conditionLogicAndOk = true;
 
-                for(let childLogic of this.reader.getConnectedNodeParentsFromId(child.id)) {
-                    if(this.subcondition[childLogic.id] !== true) {
+
+                for(let i = 0; i < this.reader.getConnectedNodeParentsFromId(child.id).length; i++) {
+                    if(this.subcondition[this.reader.getConnectedNodeParentsFromId(child.id)[i].id] !== true) {
                         conditionLogicAndOk = false
                     }
                 }
@@ -123,8 +124,8 @@ export default class Engine {
             case redtype.logic_or:
                 let conditionLogicOrOk = false;
 
-                for(let childLogic of this.reader.getConnectedNodeParentsFromId(child.id)) {
-                    if(this.subcondition[childLogic.id] === true && !conditionLogicOrOk) {
+                for(let i = 0; i < this.reader.getConnectedNodeParentsFromId(child.id).length; i++) {
+                    if(this.subcondition[this.reader.getConnectedNodeParentsFromId(child.id)[i].id] === true && !conditionLogicOrOk) {
                         conditionLogicOrOk = true
                     }
                 }
@@ -137,8 +138,8 @@ export default class Engine {
             case redtype.global_actuator:
                 let conditionGlobalActuatorOk = true;
 
-                for(let childLogic of this.reader.getConnectedNodeParentsFromId(child.id)) {
-                    if(this.subcondition[childLogic.id] !== true) {
+                for(let i = 0; i < this.reader.getConnectedNodeParentsFromId(child.id).length; i++) {
+                    if(this.subcondition[this.reader.getConnectedNodeParentsFromId(child.id)[i].id] !== true) {
                         conditionGlobalActuatorOk = false
                     }
                 }
