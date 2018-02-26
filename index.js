@@ -21,25 +21,36 @@ if(CONTEXT === 'linino') {
 
 io.on('connection', function (socket) {
     engine.setSocket(socket);
-
-    console.log("emitting get-config");
     socket.emit('get-config');
 
     socket.on('set-config', function(data) {
-        configHelper.deviceid = data.device_id;
         configHelper.graph = data.graph;
+
+        if (typeof data.device_id === "string") {
+            configHelper.deviceid = data.device_id;
+        } else {
+            configHelper.deviceid = data.device_id.toString();
+        }
+
         var conf = configHelper.getConfig();
-        console.log("set config: DEVICE " + data.device_id);
+
         socket.emit('config-ok', conf);
+
         configHelper.ready = true;
-        console.log("emitting config-ok in mode " + conf.type + " with " + conf.relays.length + " relays");
+
+        if(conf.type === 'server') {
+            setTimeout(function() { computeDelay(); }, 5000);
+        }
     });
 
     socket.on('sensor-emit', function(data) {
         if(configHelper.ready) {
-            console.log("sensor-emit: " + data);
             sensorHelper.updateData(data);
-            engine.compute();
         }
     });
 });
+
+function computeDelay() {
+    engine.compute();
+    setTimeout(function() { computeDelay(); }, 5000);
+}

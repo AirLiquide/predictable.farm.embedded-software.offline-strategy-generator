@@ -148,11 +148,18 @@ export default class Engine {
                     this.subcondition[child.id] = true;
 
                     if(this.socket !== null) {
-                        console.log("emitting sensor-receive for " + child.type + "/" + child.deviceid);
-                        this.socket.emit("sensor-receive", {
-                            sensor_type: child.type,
+                         this.socket.emit("sensor-receive", {
+                            sensor_type: "relay" + child.relaynumber,
                             device_id: child.deviceid,
                             sensor_mode: 1
+                        });
+                    }
+                } else {
+                    if(this.socket !== null) {
+                        this.socket.emit("sensor-receive", {
+                            sensor_type: "relay" + child.relaynumber,
+                            device_id: child.deviceid,
+                            sensor_mode: 0
                         });
                     }
                 }
@@ -164,8 +171,6 @@ export default class Engine {
         } else {
             if(this.queueEntryPoint.length > 0) {
                 this.extractSubCondition(this.queueEntryPoint.shift().id);
-            } else {
-                console.log(this.subcondition);
             }
         }
     }

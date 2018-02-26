@@ -1,7 +1,7 @@
 export default class ConfigHelper {
     constructor() {
         this.engine = {};
-        this.deviceid = 0;
+        this.deviceid = '0';
         this.graph = null;
         this.ready = false;
     }
@@ -10,11 +10,12 @@ export default class ConfigHelper {
         var relays = this.engine.reader.getRelayNodes();
         var type = "client";
 
-        // Compute node type
-        for (var i in relays) {
-            if (relays[i].deviceid === this.deviceid) {
-                type = "server";
-                break;
+        for (var i = 0; i < relays.length; i++) {
+            if(relays[i].deviceid !== undefined) {
+                if (relays[i].deviceid === this.deviceid) {
+                    type = "server";
+                    break;
+                }
             }
         }
 

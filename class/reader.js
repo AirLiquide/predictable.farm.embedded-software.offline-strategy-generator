@@ -29,11 +29,17 @@ export default class Reader {
     }
 
     getRelayNodes() {
+        let nodeRelayIds = [];
         let nodeRelay = [];
 
-        for(let i = 0; i < this.configHelper.graph.length; i++) {
-            if(this.configHelper.graph[i].type === "global_actuator") {
-                nodeRelay.push({deviceid:this.configHelper.graph[i].deviceid, relaynumber:this.configHelper.graph[i].relaynumber});
+        if(this.configHelper.graph !== null) {
+            for(let i = 0; i < this.configHelper.graph.length; i++) {
+                if(this.configHelper.graph[i].type === "global_actuator") {
+                    if(nodeRelayIds.indexOf(this.configHelper.graph[i].deviceid) === -1) {
+                        nodeRelay.push({deviceid:this.configHelper.graph[i].deviceid, relaynumber:this.configHelper.graph[i].relaynumber});
+                        nodeRelayIds.push(this.configHelper.graph[i].deviceid);
+                    }
+                }
             }
         }
 
