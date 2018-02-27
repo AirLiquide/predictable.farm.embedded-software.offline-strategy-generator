@@ -26,14 +26,14 @@ export default class Sensor {
 
     cleanBuffer() {
         var timestamp = Math.round(new Date().getTime() / 1000);
-        var tsYesterday = timestamp - (this.maxBufferTimeHours * 3600);
+        var timestampShift = timestamp - (this.maxBufferTimeHours * 3600);
 
         let keys = Object.keys(this.data);
 
         for(let i = 0; i < keys.length; i++) {
             if(keys[i].indexOf('_ts') !== -1) {
                 for(let j = 0; j < this.data[keys[i]].length; j++) {
-                    if(this.data[keys[i]][j].timestamp < tsYesterday) {
+                    if(this.data[keys[i]][j].timestamp < timestampShift) {
                         this.data[keys[i]].shift();
                     } else {
                         break;

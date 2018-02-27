@@ -172,7 +172,7 @@ export default class Engine {
             if(this.queueEntryPoint.length > 0) {
                 this.extractSubCondition(this.queueEntryPoint.shift().id);
             } else {
-                console.log(this.subcondition);
+                //console.log(this.subcondition);
             }
         }
     }
