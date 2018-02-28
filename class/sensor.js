@@ -1,11 +1,13 @@
 export default class Sensor {
     constructor() {
         this.data = {};
+        this.math_average = {};
         this.maxBufferTimeHours = 0.1;
     }
 
     updateData(data) {
         data = JSON.parse(data);
+
         this.data[data.sensor_id+"sensor_"+data.sensor_type] = data;
 
 
@@ -53,5 +55,44 @@ export default class Sensor {
         } else {
             return null;
         }
+    }
+
+    getSensorValueByIdAndTypeAverage(id, type, seconds) {
+        let averageValues = [];
+        let timestamp = Math.round(new Date().getTime() / 1000) - seconds;
+
+        let last = 0;
+        let first = 0;
+
+        for(let i = this.data[id+type+'_ts'].length - 1; i > 0; i--) {
+            if(i === this.data[id+type+'_ts'].length - 1) {
+                last = this.data[id+type+'_ts'][i].timestamp;
+            }
+
+            if((timestamp - this.data[id+type+'_ts'][i].timestamp) < seconds) {
+                averageValues.push(parseInt(this.data[id+type+'_ts'][i].data.sensor_value));
+            } else {
+                first = this.data[id+type+'_ts'][i + 1].timestamp;
+                break;
+            }
+        }
+
+        let storeDelay = 0;
+
+        if(first !== 0) {
+            storeDelay = last - first
+        }
+
+        return {storeDelay: storeDelay, value: this.getSumFromArrayAverage(averageValues)};
+    }
+
+    getSumFromArrayAverage(averageValues) {
+        var sum = 0;
+
+        for (var i = 0; i < averageValues.length; i++) {
+            sum += parseInt( averageValues[i], 10 ); //don't forget to add the base
+        }
+
+       return Math.floor(sum / averageValues.length);
     }
 }

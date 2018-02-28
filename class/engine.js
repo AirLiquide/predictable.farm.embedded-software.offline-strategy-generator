@@ -38,7 +38,29 @@ export default class Engine {
 
         switch (child.type) {
             case redtype.math_average:
-                this.subcondition[child.id] = true;
+                let amount = child.amount;
+
+                if(child.delayType === 'minutes') {
+                    amount = amount * 60;
+                }
+
+                if(child.delayType === 'hours') {
+                    amount = amount * 3600;
+                }
+
+                this.subcondition[child.id] = false;
+
+                if(this.sensorHelper.math_average[child.id] === undefined) {
+                    this.sensorHelper.math_average[child.id] = {
+                        timestamp: Math.round(new Date().getTime() / 1000),
+                        amount : amount
+                    };
+                } else {
+                    if( (Math.round(new Date().getTime() / 1000) - this.sensorHelper.math_average[child.id].timestamp) >= amount) {
+                        this.sensorHelper.math_average[child.id].timestamp = Math.round(new Date().getTime() / 1000);
+                        this.subcondition[child.id] = true;
+                    }
+                }
                 break;
 
             case redtype.math_inferior:
@@ -172,7 +194,7 @@ export default class Engine {
             if(this.queueEntryPoint.length > 0) {
                 this.extractSubCondition(this.queueEntryPoint.shift().id);
             } else {
-                //console.log(this.subcondition);
+                console.log(this.subcondition);
             }
         }
     }
