@@ -52,5 +52,5 @@ io.on('connection', function (socket) {
 
 function computeDelay() {
     engine.compute();
-    setTimeout(function() { computeDelay(); }, 5000);
+    setTimeout(function() { computeDelay(); }, 2000);
 }

@@ -60,7 +60,7 @@ export default class Reader {
         for(let i = 0; i < this.configHelper.graph.length; i++) {
             for(let j = 0; j < this.configHelper.graph[i].wires.length; j++) {
 
-                for(let k = 0; k < this.configHelper.graph[i].wires[j]; k++) {
+                for(let k = 0; k < this.configHelper.graph[i].wires[j].length; k++) {
                     if(this.configHelper.graph[i].wires[j][k] === id) {
                         nodes.push(this.configHelper.graph[i])
                     }

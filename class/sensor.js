@@ -1,7 +1,10 @@
+import {redtype} from "../enums/redtype";
+
 export default class Sensor {
     constructor() {
         this.data = {};
         this.math_average = {};
+        this.scheduler = {};
         this.maxBufferTimeHours = 0.1;
     }
 

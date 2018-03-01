@@ -7,6 +7,7 @@ export let redtype = {
     math_superior_equal:"math_superior_equal",
     logic_and:"logic_and",
     logic_or:"logic_or",
+    scheduler:"scheduler",
 
     global_actuator:"global_actuator"
 };

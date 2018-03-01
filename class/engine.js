@@ -7,12 +7,15 @@ export default class Engine {
         this.sensorHelper = sensorHelper;
         this.configHelper = configHelper;
         this.socket = null;
+        this.idCycle = '';
 
         this.subcondition = [];
         this.queueEntryPoint = [];
     }
 
     compute() {
+        this.idCycle = this.getIdCycle();
+
         if(this.configHelper.graph !== null) {
             for(let i = 0; i < this.reader.getEntryPointNode().length; i++) {
                 this.queueEntryPoint.push(this.reader.getEntryPointNode()[i]);
@@ -22,8 +25,79 @@ export default class Engine {
         }
     }
 
+    getIdCycle() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+
     setSocket(socket) {
         this.socket = socket;
+    }
+
+    setScheadulerNodeStatut(node) {
+        if(this.sensorHelper.scheduler[node.id] === undefined) {
+            this.sensorHelper.scheduler[node.id] = {cycle:this.idCycle, timestamp:Math.round(new Date().getTime() / 1000)};
+        }
+
+        if(this.sensorHelper.scheduler[node.id].cycle !== this.idCycle) {
+            this.subcondition[node.id] = false;
+        }
+
+        let current = new Date();
+        let currentTimestamp = Math.round(new Date().getTime() / 1000);
+        let currentHour = current.getHours();
+        let currentMinutes = current.getMinutes();
+
+        let startHour = parseInt(node.startHour);
+        let startMinute = parseInt(node.startMinute);
+        let endHour = parseInt(node.endHour);
+        let endMinute = parseInt(node.endMinute);
+
+        let interval = parseInt(node.interval);
+
+        let inRange = false;
+
+        if(node.sendFrequency === 'interval' && node.sendDay === 'everyday' && node.sendRange === 'time-range') {
+            if(currentHour > startHour) {
+                if(currentHour < endHour) {
+                    inRange = true;
+                } else if(currentHour === endHour) {
+                    if(currentMinutes < endMinute) {
+                        inRange = true;
+                    }
+                }
+            } else if (currentHour === startHour) {
+                if (currentMinutes >= startMinute) {
+                    if(currentHour < endHour) {
+                        inRange = true;
+                    } else if(currentHour === endHour) {
+                        if(currentMinutes <= endMinute) {
+                            inRange = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if(inRange) {
+            if(node.intervalUnits === 'minutes') {
+                let minutesFromLastActivation = (currentTimestamp - this.sensorHelper.scheduler[node.id].timestamp) / 60;
+
+                if(minutesFromLastActivation >= interval) {
+                    this.sensorHelper.scheduler[node.id] = {cycle:this.idCycle, timestamp:Math.round(new Date().getTime() / 1000)};
+                    this.subcondition[node.id] = true;
+                }
+            } else if (node.intervalUnits === 'hours') {
+                let hoursFromLastActivation = (currentTimestamp - this.sensorHelper.scheduler[node.id].timestamp) / 3600;
+
+                if(hoursFromLastActivation >= interval) {
+                    this.sensorHelper.scheduler[node.id] = {cycle:this.idCycle, timestamp:Math.round(new Date().getTime() / 1000)};
+                    this.subcondition[node.id] = true;
+                }
+            }
+        }
     }
 
     extractSubCondition(entrypoint) {
@@ -39,7 +113,6 @@ export default class Engine {
         switch (child.type) {
             case redtype.math_average:
                 let amount = child.amount;
-
                 if(child.delayType === 'minutes') {
                     amount = amount * 60;
                 }
@@ -131,8 +204,13 @@ export default class Engine {
             case redtype.logic_and:
                 let conditionLogicAndOk = true;
 
-
                 for(let i = 0; i < this.reader.getConnectedNodeParentsFromId(child.id).length; i++) {
+                    let nodeS = this.reader.getNodeFromId(this.reader.getConnectedNodeParentsFromId(child.id)[i].id);
+
+                    if(nodeS.type === redtype.scheduler) {
+                        this.setScheadulerNodeStatut(nodeS)
+                    }
+
                     if(this.subcondition[this.reader.getConnectedNodeParentsFromId(child.id)[i].id] !== true) {
                         conditionLogicAndOk = false
                     }
@@ -140,6 +218,8 @@ export default class Engine {
 
                 if(conditionLogicAndOk) {
                     this.subcondition[child.id] = true;
+                } else {
+                    this.subcondition[child.id] = false;
                 }
                 break;
 
@@ -154,6 +234,8 @@ export default class Engine {
 
                 if(conditionLogicOrOk) {
                     this.subcondition[child.id] = true;
+                } else {
+                    this.subcondition[child.id] = false;
                 }
                 break;
 
@@ -177,6 +259,8 @@ export default class Engine {
                         });
                     }
                 } else {
+                    this.subcondition[child.id] = false;
+
                     if(this.socket !== null) {
                         this.socket.emit("sensor-receive", {
                             sensor_type: "relay" + child.relaynumber,
