@@ -4,12 +4,18 @@ export default class Sensor {
     constructor() {
         this.data = {};
         this.math_average = {};
+        this.dli_last_update = Date.now();
         this.scheduler = {};
         this.maxBufferTimeHours = 0.1;
     }
 
     updateData(data) {
         data = JSON.parse(data);
+
+
+        if(data.sensor_type === 'light_par') {
+            this.storeDLI(data);
+        }
 
         this.data[data.sensor_id+"sensor_"+data.sensor_type] = data;
 
@@ -93,9 +99,28 @@ export default class Sensor {
         var sum = 0;
 
         for (var i = 0; i < averageValues.length; i++) {
-            sum += parseInt( averageValues[i], 10 ); //don't forget to add the base
+            sum += parseInt( averageValues[i], 10 );
         }
 
        return Math.floor(sum / averageValues.length);
+    }
+
+    storeDLI(data) {
+        var time = Date.now();
+        var deltaT = time - this.dli_last_update;
+        var mult = deltaT / 1000;
+
+        var value = 0;
+
+        if(this.data[data.sensor_id+"sensor_light_dli"] !== undefined) {
+            value = this.data[data.sensor_id+"sensor_light_dli"].sensor_value;
+        }
+
+        this.data[data.sensor_id+"sensor_light_dli"] = { device_id: data.device_id,
+                                                         sensor_type: 'light_dli',
+                                                         sensor_id: data.sensor_id,
+                                                         sensor_value: (value + (parseFloat(data.sensor_value) * mult) / 1000000) };
+
+        this.dli_last_update = time;
     }
 }

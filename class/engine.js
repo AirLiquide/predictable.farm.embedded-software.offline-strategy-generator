@@ -1,5 +1,6 @@
 import Reader from "./reader";
 import { redtype } from '../enums/redtype';
+import Scheduler from "./scheduler";
 
 export default class Engine {
     constructor(sensorHelper, configHelper) {
@@ -45,58 +46,9 @@ export default class Engine {
             this.subcondition[node.id] = false;
         }
 
-        let current = new Date();
-        let currentTimestamp = Math.round(new Date().getTime() / 1000);
-        let currentHour = current.getHours();
-        let currentMinutes = current.getMinutes();
-
-        let startHour = parseInt(node.startHour);
-        let startMinute = parseInt(node.startMinute);
-        let endHour = parseInt(node.endHour);
-        let endMinute = parseInt(node.endMinute);
-
-        let interval = parseInt(node.interval);
-
-        let inRange = false;
-
-        if(node.sendFrequency === 'interval' && node.sendDay === 'everyday' && node.sendRange === 'time-range') {
-            if(currentHour > startHour) {
-                if(currentHour < endHour) {
-                    inRange = true;
-                } else if(currentHour === endHour) {
-                    if(currentMinutes < endMinute) {
-                        inRange = true;
-                    }
-                }
-            } else if (currentHour === startHour) {
-                if (currentMinutes >= startMinute) {
-                    if(currentHour < endHour) {
-                        inRange = true;
-                    } else if(currentHour === endHour) {
-                        if(currentMinutes <= endMinute) {
-                            inRange = true;
-                        }
-                    }
-                }
-            }
-        }
-
-        if(inRange) {
-            if(node.intervalUnits === 'minutes') {
-                let minutesFromLastActivation = (currentTimestamp - this.sensorHelper.scheduler[node.id].timestamp) / 60;
-
-                if(minutesFromLastActivation >= interval) {
-                    this.sensorHelper.scheduler[node.id] = {cycle:this.idCycle, timestamp:Math.round(new Date().getTime() / 1000)};
-                    this.subcondition[node.id] = true;
-                }
-            } else if (node.intervalUnits === 'hours') {
-                let hoursFromLastActivation = (currentTimestamp - this.sensorHelper.scheduler[node.id].timestamp) / 3600;
-
-                if(hoursFromLastActivation >= interval) {
-                    this.sensorHelper.scheduler[node.id] = {cycle:this.idCycle, timestamp:Math.round(new Date().getTime() / 1000)};
-                    this.subcondition[node.id] = true;
-                }
-            }
+        if(new Scheduler(node, this.sensorHelper, this.idCycle).getScheadulerNodeStatut()) {
+            this.sensorHelper.scheduler[node.id] = {cycle:this.idCycle, timestamp:Math.round(new Date().getTime() / 1000)};
+            this.subcondition[node.id] = true;
         }
     }
 
