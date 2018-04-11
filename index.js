@@ -12,7 +12,7 @@ configHelper.engine = engine;
 
 let io = {};
 
-if(CONTEXT === 'linino') {
+if(CONTEXT === 'linino' || CONTEXT === 'iot2000') {
     io = eval('require')('/usr/lib/node_modules/socket.io')(LOCAL_ENGINE_PORT);
     console.log("LOCAL ENGINE STARTED");
 } else {

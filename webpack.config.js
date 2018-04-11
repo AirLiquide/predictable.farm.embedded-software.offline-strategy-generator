@@ -46,7 +46,7 @@ var config = {
 };
 
 module.exports = function(env) {
-    if(env === "linino") {
+    if(env === "linino" || env === "iot2000") {
         config.output = {
             path: BUILD_DIR,
             filename: 'local-engine.js'
