@@ -1,56 +1,56 @@
-import Engine from './class/engine';
-import Sensor from './class/sensor';
-import ConfigHelper from "./class/ConfigHelper";
+import Engine from './class/engine'
+import Sensor from './class/sensor'
+import ConfigHelper from './class/ConfigHelper'
 
-const LOCAL_ENGINE_PORT = 6500;
+const LOCAL_ENGINE_PORT = 6500
 
-let sensorHelper = new Sensor();
-let configHelper = new ConfigHelper();
-let engine = new Engine(sensorHelper, configHelper);
+let sensorHelper = new Sensor()
+let configHelper = new ConfigHelper()
+let engine = new Engine(sensorHelper, configHelper)
 
-configHelper.engine = engine;
+configHelper.engine = engine
 
-let io = {};
+let io = {}
 
-if(CONTEXT === 'linino' || CONTEXT === 'iot2000') {
-    io = eval('require')('/usr/lib/node_modules/socket.io')(LOCAL_ENGINE_PORT);
-    console.log("LOCAL ENGINE STARTED");
+if (CONTEXT === 'linino' || CONTEXT === 'iot2000') {
+  io = eval('require')('/usr/lib/node_modules/socket.io')(LOCAL_ENGINE_PORT)
+  console.log('LOCAL ENGINE STARTED')
 } else {
-    io = require('socket.io')(LOCAL_ENGINE_PORT);
+  io = require('socket.io')(LOCAL_ENGINE_PORT)
 }
 
 io.on('connection', function (socket) {
-    engine.setSocket(socket);
-    socket.emit('get-config');
+  engine.setSocket(socket)
+  socket.emit('get-config')
 
-    socket.on('set-config', function(data) {
-        configHelper.graph = data.graph;
+  socket.on('set-config', function (data) {
+    configHelper.graph = data.graph
 
-        if (typeof data.device_id === "string") {
-            configHelper.deviceid = data.device_id;
-        } else {
-            configHelper.deviceid = data.device_id.toString();
-        }
+    if (typeof data.device_id === 'string') {
+      configHelper.deviceid = data.device_id
+    } else {
+      configHelper.deviceid = data.device_id.toString()
+    }
 
-        var conf = configHelper.getConfig();
+    var conf = configHelper.getConfig()
 
-        socket.emit('config-ok', conf);
+    socket.emit('config-ok', conf)
 
-        configHelper.ready = true;
+    configHelper.ready = true
 
-        if(conf.type === 'server') {
-            setTimeout(function() { computeDelay(); }, 5000);
-        }
-    });
+    if (conf.type === 'server') {
+      setTimeout(function () { computeDelay() }, 5000)
+    }
+  })
 
-    socket.on('sensor-emit', function(data) {
-        if(configHelper.ready) {
-            sensorHelper.updateData(data);
-        }
-    });
-});
+  socket.on('sensor-emit', function (data) {
+    if (configHelper.ready) {
+      sensorHelper.updateData(data)
+    }
+  })
+})
 
-function computeDelay() {
-    engine.compute();
-    setTimeout(function() { computeDelay(); }, 2000);
+function computeDelay () {
+  engine.compute()
+  setTimeout(function () { computeDelay() }, 2000)
 }
