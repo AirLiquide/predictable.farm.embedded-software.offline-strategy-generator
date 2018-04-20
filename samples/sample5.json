@@ -1,0 +1,63 @@
+[
+   {
+      "id":"c5b59893.d53038",
+      "type":"sensor_air_co2",
+      "z":"647a4eea.95add",
+      "name":"CO2",
+      "deviceid":"101",
+      "timeout":"10",
+      "x":110,
+      "y":140,
+      "wires":[
+         [
+            "35a786a4.55ecba"
+         ]
+      ]
+   },
+   {
+      "id":"c74cb340.6d89e",
+      "type":"global_actuator",
+      "z":"647a4eea.95add",
+      "name":"Relai ON",
+      "deviceid":"101",
+      "relaynumber":"1",
+      "value":"1",
+      "timeout":"10",
+      "x":520,
+      "y":60,
+      "wires":[
+
+      ]
+   },
+   {
+      "id":"35a786a4.55ecba",
+      "type":"math_superior_equal",
+      "z":"647a4eea.95add",
+      "value":"2000",
+      "x":290,
+      "y":140,
+      "wires":[
+         [
+            "c74cb340.6d89e"
+         ],
+         [
+            "c843ca16.6bfdc8"
+         ]
+      ]
+   },
+   {
+      "id":"c843ca16.6bfdc8",
+      "type":"global_actuator",
+      "z":"647a4eea.95add",
+      "name":"Relai OFF",
+      "deviceid":"101",
+      "relaynumber":"1",
+      "value":"0",
+      "timeout":"10",
+      "x":520,
+      "y":180,
+      "wires":[
+
+      ]
+   }
+]

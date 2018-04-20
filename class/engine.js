@@ -57,171 +57,172 @@ export default class Engine {
 
     let parent = this.reader.getNodeFromId(entrypoint)
     let child = this.reader.getNodeFromId(parent.wires[0][0])
+    if (child) {
+      if (child.wires.length === 0) {
+        finished = true
+      }
 
-    if (child.wires.length === 0) {
-      finished = true
-    }
-
-    switch (child.type) {
-      case redtype.math_average:
-        let amount = child.amount
-        if (child.delayType === 'minutes') {
-          amount = amount * 60
-        }
-
-        if (child.delayType === 'hours') {
-          amount = amount * 3600
-        }
-
-        this.subcondition[child.id] = false
-
-        if (this.sensorHelper.math_average[child.id] === undefined) {
-          this.sensorHelper.math_average[child.id] = {
-            timestamp: Math.round(new Date().getTime() / 1000),
-            amount: amount
+      switch (child.type) {
+        case redtype.math_average:
+          let amount = child.amount
+          if (child.delayType === 'minutes') {
+            amount = amount * 60
           }
-        } else {
-          if ((Math.round(new Date().getTime() / 1000) - this.sensorHelper.math_average[child.id].timestamp) >= amount) {
-            this.sensorHelper.math_average[child.id].timestamp = Math.round(new Date().getTime() / 1000)
+
+          if (child.delayType === 'hours') {
+            amount = amount * 3600
+          }
+
+          this.subcondition[child.id] = false
+
+          if (this.sensorHelper.math_average[child.id] === undefined) {
+            this.sensorHelper.math_average[child.id] = {
+              timestamp: Math.round(new Date().getTime() / 1000),
+              amount: amount
+            }
+          } else {
+            if ((Math.round(new Date().getTime() / 1000) - this.sensorHelper.math_average[child.id].timestamp) >= amount) {
+              this.sensorHelper.math_average[child.id].timestamp = Math.round(new Date().getTime() / 1000)
+              this.subcondition[child.id] = true
+            }
+          }
+          break
+
+        case redtype.math_inferior:
+          if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === null) {
+            this.subcondition[child.id] = false
+            break
+          }
+
+          if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) < child.value) {
             this.subcondition[child.id] = true
+          } else {
+            this.subcondition[child.id] = false
           }
-        }
-        break
-
-      case redtype.math_inferior:
-        if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === null) {
-          this.subcondition[child.id] = false
           break
-        }
 
-        if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) < child.value) {
-          this.subcondition[child.id] = true
-        } else {
-          this.subcondition[child.id] = false
-        }
-        break
+        case redtype.math_inferior_equal:
+          if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === null) {
+            this.subcondition[child.id] = false
+            break
+          }
 
-      case redtype.math_inferior_equal:
-        if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === null) {
-          this.subcondition[child.id] = false
+          if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) <= child.value) {
+            this.subcondition[child.id] = true
+          } else {
+            this.subcondition[child.id] = false
+          }
           break
-        }
 
-        if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) <= child.value) {
-          this.subcondition[child.id] = true
-        } else {
-          this.subcondition[child.id] = false
-        }
-        break
+        case redtype.math_equal:
+          if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === null) {
+            this.subcondition[child.id] = false
+            break
+          }
 
-      case redtype.math_equal:
-        if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === null) {
-          this.subcondition[child.id] = false
+          if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === child.value) {
+            this.subcondition[child.id] = true
+          } else {
+            this.subcondition[child.id] = false
+          }
           break
-        }
 
-        if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === child.value) {
-          this.subcondition[child.id] = true
-        } else {
-          this.subcondition[child.id] = false
-        }
-        break
+        case redtype.math_superior:
+          if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === null) {
+            this.subcondition[child.id] = false
+            break
+          }
 
-      case redtype.math_superior:
-        if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === null) {
-          this.subcondition[child.id] = false
+          if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) > child.value) {
+            this.subcondition[child.id] = true
+          } else {
+            this.subcondition[child.id] = false
+          }
           break
-        }
 
-        if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) > child.value) {
-          this.subcondition[child.id] = true
-        } else {
-          this.subcondition[child.id] = false
-        }
-        break
+        case redtype.math_superior_equal:
+          if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === null) {
+            this.subcondition[child.id] = false
+            break
+          }
 
-      case redtype.math_superior_equal:
-        if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) === null) {
-          this.subcondition[child.id] = false
+          if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) >= child.value) {
+            this.subcondition[child.id] = true
+          } else {
+            this.subcondition[child.id] = false
+          }
           break
-        }
 
-        if (this.sensorHelper.getSensorValueByIdAndType(this.configHelper.deviceid, parent.type) >= child.value) {
-          this.subcondition[child.id] = true
-        } else {
-          this.subcondition[child.id] = false
-        }
-        break
+        case redtype.logic_and:
+          let conditionLogicAndOk = true
 
-      case redtype.logic_and:
-        let conditionLogicAndOk = true
+          for (let i = 0; i < this.reader.getConnectedNodeParentsFromId(child.id).length; i++) {
+            let nodeS = this.reader.getNodeFromId(this.reader.getConnectedNodeParentsFromId(child.id)[i].id)
 
-        for (let i = 0; i < this.reader.getConnectedNodeParentsFromId(child.id).length; i++) {
-          let nodeS = this.reader.getNodeFromId(this.reader.getConnectedNodeParentsFromId(child.id)[i].id)
+            if (nodeS.type === redtype.scheduler) {
+              this.setScheadulerNodeStatut(nodeS)
+            }
 
-          if (nodeS.type === redtype.scheduler) {
-            this.setScheadulerNodeStatut(nodeS)
+            if (this.subcondition[this.reader.getConnectedNodeParentsFromId(child.id)[i].id] !== true) {
+              conditionLogicAndOk = false
+            }
           }
 
-          if (this.subcondition[this.reader.getConnectedNodeParentsFromId(child.id)[i].id] !== true) {
-            conditionLogicAndOk = false
+          if (conditionLogicAndOk) {
+            this.subcondition[child.id] = true
+          } else {
+            this.subcondition[child.id] = false
           }
-        }
+          break
 
-        if (conditionLogicAndOk) {
-          this.subcondition[child.id] = true
-        } else {
-          this.subcondition[child.id] = false
-        }
-        break
+        case redtype.logic_or:
+          let conditionLogicOrOk = false
 
-      case redtype.logic_or:
-        let conditionLogicOrOk = false
-
-        for (let i = 0; i < this.reader.getConnectedNodeParentsFromId(child.id).length; i++) {
-          if (this.subcondition[this.reader.getConnectedNodeParentsFromId(child.id)[i].id] === true && !conditionLogicOrOk) {
-            conditionLogicOrOk = true
+          for (let i = 0; i < this.reader.getConnectedNodeParentsFromId(child.id).length; i++) {
+            if (this.subcondition[this.reader.getConnectedNodeParentsFromId(child.id)[i].id] === true && !conditionLogicOrOk) {
+              conditionLogicOrOk = true
+            }
           }
-        }
 
-        if (conditionLogicOrOk) {
-          this.subcondition[child.id] = true
-        } else {
-          this.subcondition[child.id] = false
-        }
-        break
-
-      case redtype.global_actuator:
-        let conditionGlobalActuatorOk = true
-
-        for (let i = 0; i < this.reader.getConnectedNodeParentsFromId(child.id).length; i++) {
-          if (this.subcondition[this.reader.getConnectedNodeParentsFromId(child.id)[i].id] !== true) {
-            conditionGlobalActuatorOk = false
+          if (conditionLogicOrOk) {
+            this.subcondition[child.id] = true
+          } else {
+            this.subcondition[child.id] = false
           }
-        }
+          break
 
-        if (conditionGlobalActuatorOk) {
-          this.subcondition[child.id] = true
+        case redtype.global_actuator:
+          let conditionGlobalActuatorOk = true
 
-          if (this.socket !== null) {
-            this.socket.emit('sensor-receive', {
-              sensor_type: 'relay' + child.relaynumber,
-              device_id: child.deviceid,
-              sensor_mode: 1
-            })
+          for (let i = 0; i < this.reader.getConnectedNodeParentsFromId(child.id).length; i++) {
+            if (this.subcondition[this.reader.getConnectedNodeParentsFromId(child.id)[i].id] !== true) {
+              conditionGlobalActuatorOk = false
+            }
           }
-        } else {
-          this.subcondition[child.id] = false
 
-          if (this.socket !== null) {
-            this.socket.emit('sensor-receive', {
-              sensor_type: 'relay' + child.relaynumber,
-              device_id: child.deviceid,
-              sensor_mode: 0
-            })
+          if (conditionGlobalActuatorOk) {
+            this.subcondition[child.id] = true
+
+            if (this.socket !== null) {
+              this.socket.emit('sensor-receive', {
+                sensor_type: 'relay' + child.relaynumber,
+                device_id: child.deviceid,
+                sensor_mode: 1
+              })
+            }
+          } else {
+            this.subcondition[child.id] = false
+
+            if (this.socket !== null) {
+              this.socket.emit('sensor-receive', {
+                sensor_type: 'relay' + child.relaynumber,
+                device_id: child.deviceid,
+                sensor_mode: 0
+              })
+            }
           }
-        }
-        break
+          break
+      }
     }
 
     if (!finished) {
