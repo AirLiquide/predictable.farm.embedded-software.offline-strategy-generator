@@ -16,7 +16,8 @@ if (CONTEXT === 'linino' || CONTEXT === 'iot2000') {
   io = eval('require')('/usr/lib/node_modules/socket.io')(LOCAL_ENGINE_PORT)
   console.log('LOCAL ENGINE STARTED')
 } else {
-  io = require('socket.io')(LOCAL_ENGINE_PORT)
+  // io = require('socket.io')(LOCAL_ENGINE_PORT)
+  io = eval('require')('/usr/lib/node_modules/socket.io')(LOCAL_ENGINE_PORT)
 }
 
 io.on('connection', function (socket) {

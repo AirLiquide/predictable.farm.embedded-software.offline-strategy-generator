@@ -57,7 +57,7 @@ export default class Engine {
 
     let parent = this.reader.getNodeFromId(entrypoint)
     let child = this.reader.getNodeFromId(parent.wires[0][0])
-    if (child) {
+    if (child != undefined || child != null) {
       if (child.wires.length === 0) {
         finished = true
       }
@@ -204,20 +204,24 @@ export default class Engine {
             this.subcondition[child.id] = true
 
             if (this.socket !== null) {
+              // console.log('#######child : ', child)
               this.socket.emit('sensor-receive', {
                 sensor_type: 'relay' + child.relaynumber,
                 device_id: child.deviceid,
-                sensor_mode: 1
+                sensor_mode: 1,
+                sensor_value: child.value,
               })
             }
           } else {
             this.subcondition[child.id] = false
 
             if (this.socket !== null) {
+              // console.log('#######child : ', child)
               this.socket.emit('sensor-receive', {
                 sensor_type: 'relay' + child.relaynumber,
                 device_id: child.deviceid,
-                sensor_mode: 0
+                sensor_mode: 0,
+                sensor_value: child.value,
               })
             }
           }
