@@ -14,17 +14,23 @@ let io = {}
 
 if (CONTEXT === 'linino' || CONTEXT === 'iot2000') {
   io = eval('require')('/usr/lib/node_modules/socket.io')(LOCAL_ENGINE_PORT)
-  console.log('LOCAL ENGINE STARTED')
 } else {
   // io = require('socket.io')(LOCAL_ENGINE_PORT)
   io = eval('require')('/usr/lib/node_modules/socket.io')(LOCAL_ENGINE_PORT)
 }
+console.log('[' + (new Date()).toISOString() + '] ' + 'Local Engine started on port ' + LOCAL_ENGINE_PORT)
 
 io.on('connection', function (socket) {
   engine.setSocket(socket)
   socket.emit('get-config')
 
   socket.on('set-config', function (data) {
+    console.log('[' + (new Date()).toISOString() + '] ' + 'New config received')
+    if (!data) {
+      socket.emit('config-error', 'data object is null')
+      return
+    }
+
     configHelper.graph = data.graph
 
     if (typeof data.device_id === 'string') {
