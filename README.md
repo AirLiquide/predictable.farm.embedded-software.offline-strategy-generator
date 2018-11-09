@@ -5,7 +5,7 @@ Predictable Farm Offline Strategy Generator
 
 This software act as an offline plugin for IBM nodered used in the predictable-farm automation service. When user create an automation recipe, the workflow receipe is sent over websocket to the connected devices.
 Then this software read the recipe and execute the rules based on the sensor / actuator role, if the Internet connection is broken.
-This way the automation logic remains on even when Internel link is down.
+This way the automation logic remains on even when the Internet link is down.
 
 Needs NodeJS 0.10.*
 
