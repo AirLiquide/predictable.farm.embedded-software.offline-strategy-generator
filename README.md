@@ -1,4 +1,4 @@
-Predictable Farm Offline Strategy Generator
+Predictable Farm — Offline Strategy Generator
 ---
 
 ### Introduction
