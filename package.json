@@ -12,12 +12,8 @@
     "dev": "supervisor -- build/bundle-local.js -h 0.0.0.0 -p 8080",
     "start": "node build/bundle-local.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git@digital-git.airliquide.com:creative_foundry/predictable-farm/predictable-offlinestrat-generator.git"
-  },
-  "author": "",
-  "license": "ISC",
+  "author": "Air Liquide",
+  "license": "MIT",
   "dependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",

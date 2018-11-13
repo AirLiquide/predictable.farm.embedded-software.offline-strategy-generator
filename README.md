@@ -23,3 +23,9 @@ For dev
 For prod
 
     npm start
+
+### License
+
+MIT. See License.txt file
+
+**This work uses sofware that is licensed under various licenses (see https://github.com/Supervisor/supervisor/blob/master/LICENSES.txt). The respective files have kept their original license notices.**
